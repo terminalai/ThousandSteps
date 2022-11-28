@@ -1,15 +1,18 @@
 from google.cloud import storage
 import sys
 
+GCP_PROJECT_ID = "gait-analyzer-1ac2c"
+BUCKET_NAME = "pdbiostamp-rc21"
+
 client = storage.Client(
-    project="gait-analyzer-1ac2c",
+    project=GCP_PROJECT_ID,
 )
 
 def upload(zipfile_url):
     archive = open(zipfile_url, mode="rb")
 
     object_name = 'super-important-data-v1'
-    bucket = client.bucket("pdbiostamp-rc21")
+    bucket = client.bucket(BUCKET_NAME)
 
     blob = storage.Blob(object_name, bucket)
     blob.upload_from_file(archive, content_type='application/zip')
