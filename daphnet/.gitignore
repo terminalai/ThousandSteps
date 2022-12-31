@@ -1,2 +1,2 @@
 automl-model/
-model.h5
+models/mobilenet_small/model.h5
