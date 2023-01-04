@@ -21,14 +21,14 @@
 \tikzstyle{connection}=[ultra thick,every node/.style={sloped,allow upside down},draw=\edgecolor,opacity=0.7]
 \tikzstyle{copyconnection}=[ultra thick,every node/.style={sloped,allow upside down},draw={rgb:blue,4;red,1;green,1;black,3},opacity=0.7]
 
-\node[canvas is zy plane at x=0] (temp) at (-3,0,0) {\includegraphics[width=8cm,height=8cm]{hello.png}};
+\node[canvas is zy plane at x=0] (temp) at (-3,0,0) {\includegraphics[width=3cm,height=3cm]{hello.png}};
 
 \pic[shift={(0,0,0)}] at (0,0,0) 
     {Box={
         name=conv1,
         caption= ,
-        xlabel={{8, }},
-        zlabel=16,
+        xlabel={{32, }},
+        zlabel=,
         fill=\ConvColor,
         height=16,
         width=2,
@@ -36,72 +36,100 @@
         }
     };
 
-\pic[shift={ (0,0,0) }] at (conv1-east) 
+\pic[shift={(0,0,0)}] at (conv1-east) 
+    {Box={
+        name=conv2,
+        caption= ,
+        xlabel={{56, }},
+        zlabel=16,
+        fill=\ConvColor,
+        height=16,
+        width=4,
+        depth=16
+        }
+    };
+
+\pic[shift={ (0,0,0) }] at (conv2-east) 
     {Box={
         name=pool1,
         caption= ,
         fill=\PoolColor,
         opacity=0.5,
-        height=32,
+        height=16,
         width=1,
-        depth=32
+        depth=16
         }
     };
 
 \pic[shift={(1,0,0)}] at (pool1-east) 
     {Box={
-        name=conv2,
+        name=conv3,
         caption= ,
-        xlabel={{64, }},
-        zlabel=128,
+        xlabel={{128, }},
+        zlabel=8,
         fill=\ConvColor,
-        height=32,
-        width=2,
-        depth=32
+        height=8,
+        width=8,
+        depth=8
         }
     };
 
-\draw [connection]  (pool1-east)    -- node {\midarrow} (conv2-west);
+\draw [connection]  (pool1-east)    -- node {\midarrow} (conv3-west);
 
-\pic[shift={ (0,0,0) }] at (conv2-east) 
+\pic[shift={ (0,0,0) }] at (conv3-east) 
     {Box={
         name=pool2,
         caption= ,
         fill=\PoolColor,
         opacity=0.5,
-        height=28,
+        height=8,
         width=1,
-        depth=28
+        depth=8
         }
     };
 
-\pic[shift={(3,0,0)}] at (pool1-east) 
+\pic[shift={(1,0,0)}] at (pool2-east) 
+    {Box={
+        name=conv4,
+        caption= ,
+        xlabel={{128, }},
+        zlabel=4,
+        fill=\ConvColor,
+        height=4,
+        width=8,
+        depth=4
+        }
+    };
+
+\draw [connection]  (pool2-east)    -- node {\midarrow} (conv4-west);
+
+\pic[shift={ (0,0,0) }] at (conv4-east) 
+    {Box={
+        name=pool3,
+        caption= ,
+        fill=\PoolColor,
+        opacity=0.5,
+        height=4,
+        width=1,
+        depth=4
+        }
+    };
+
+\pic[shift={(1,0,0)}] at (pool3-east) 
     {Box={
         name=soft1,
-        caption=SOFT,
+        caption=$\sigma(x)$,
         xlabel={{" ","dummy"}},
-        zlabel=10,
+        zlabel=,
         fill=\SoftmaxColor,
         opacity=0.8,
         height=3,
         width=1.5,
-        depth=25
+        depth=1
         }
     };
 
-\draw [connection]  (pool2-east)    -- node {\midarrow} (soft1-west);
-
-\pic[shift={(1.5,0,0)}] at (soft1-east) 
-    {Ball={
-        name=sum1,
-        fill=\SumColor,
-        opacity=0.6,
-        radius=2.5,
-        logo=$+$
-        }
-    };
-
-\draw [connection]  (soft1-east)    -- node {\midarrow} (sum1-west);
+\draw [connection]  (pool3-east)    -- node {\midarrow} (soft1-west);
 
 \end{tikzpicture}
 \end{document}
